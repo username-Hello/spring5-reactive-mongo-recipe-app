@@ -29,16 +29,13 @@ public class RecipeController {
 
     @GetMapping("/recipe/{id}/show")
     public String showById(@PathVariable String id, Model model){
-
         model.addAttribute("recipe", recipeService.findById(id).block());
-
         return "recipe/show";
     }
 
     @GetMapping("recipe/new")
     public String newRecipe(Model model){
         model.addAttribute("recipe", new RecipeCommand());
-
         return "recipe/recipeform";
     }
 
@@ -50,18 +47,13 @@ public class RecipeController {
 
     @PostMapping("recipe")
     public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult bindingResult){
-
         if(bindingResult.hasErrors()){
-
             bindingResult.getAllErrors().forEach(objectError -> {
                 log.debug(objectError.toString());
             });
-
             return RECIPE_RECIPEFORM_URL;
         }
-
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command).block();
-
         return "redirect:/recipe/" + savedCommand.getId() + "/show";
     }
 
